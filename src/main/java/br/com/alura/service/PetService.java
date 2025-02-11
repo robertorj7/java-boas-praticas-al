@@ -47,7 +47,7 @@ public class PetService {
                 null
             );
 
-            System.out.println(pet.getId() +" - " +pet.getTipo() +" - " +pet.getNome()
+            System.out.println(pet.getTipo() +" - " +pet.getNome()
                     +" - " +pet.getRaca() +" - " + pet.getIdade() +" ano(s)");
         }
         return false;
