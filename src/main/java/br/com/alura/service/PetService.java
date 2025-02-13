@@ -2,15 +2,14 @@ package br.com.alura.service;
 
 import br.com.alura.client.ClientHttpConfiguration;
 import br.com.alura.domain.Pet;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.http.HttpResponse;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class PetService {
@@ -20,7 +19,7 @@ public class PetService {
         this.client = client;
     }
 
-    public boolean listarPetsDoAbrigo() throws IOException, InterruptedException {
+    public void listarPetsDoAbrigo() throws IOException, InterruptedException {
         System.out.println("Digite o id ou nome do abrigo:");
         String idOuNome = new Scanner(System.in).nextLine();
 
@@ -31,29 +30,23 @@ public class PetService {
         int statusCode = response.statusCode();
         if (statusCode == 404 || statusCode == 500) {
             System.out.println("ID ou nome não cadastrado!");
-            return true;
         }
         String responseBody = response.body();
-        JsonArray jsonArray = JsonParser.parseString(responseBody).getAsJsonArray();
+        Pet[] pets = new ObjectMapper().readValue(responseBody, Pet[].class);
+        List<Pet> petList = Arrays.stream(pets).toList();
         System.out.println("Pets cadastrados:");
-        for (JsonElement element : jsonArray) {
-            JsonObject jsonObject = element.getAsJsonObject();
-            Pet pet = new Pet(
-                jsonObject.get("tipo").getAsString(),
-                jsonObject.get("nome").getAsString(),
-                jsonObject.get("raca").getAsString(),
-                jsonObject.get("idade").getAsInt(),
-                null,
-                null
-            );
-
-            System.out.println(pet.getTipo() +" - " +pet.getNome()
-                    +" - " +pet.getRaca() +" - " + pet.getIdade() +" ano(s)");
+        for (Pet pet : petList) {
+            long id = pet.getId();
+            String tipo = pet.getTipo();
+            String nome = pet.getNome();
+            String raca = pet.getRaca();
+            int idade = pet.getIdade();
+            System.out.println(id + " - " + tipo +" - " + nome
+                    +" - " + raca +" - " + idade +" ano(s)");
         }
-        return false;
     }
 
-    public boolean importarPetsDoAbrigo() throws IOException, InterruptedException {
+    public void importarPetsDoAbrigo() throws IOException, InterruptedException {
         System.out.println("Digite o id ou nome do abrigo:");
         String idOuNome = new Scanner(System.in).nextLine();
 
@@ -95,6 +88,5 @@ public class PetService {
             }
         }
         reader.close();
-        return false;
     }
 }
