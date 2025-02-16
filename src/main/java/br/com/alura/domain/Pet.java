@@ -58,4 +58,32 @@ public class Pet {
     public Float getPeso() {
         return peso;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setRaca(String raca) {
+        this.raca = raca;
+    }
+
+    public void setIdade(Integer idade) {
+        this.idade = idade;
+    }
+
+    public void setCor(String cor) {
+        this.cor = cor;
+    }
+
+    public void setPeso(Float peso) {
+        this.peso = peso;
+    }
 }
