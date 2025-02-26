@@ -21,7 +21,7 @@ public class AbrigoServiceTest {
     private Abrigo abrigo = new Abrigo("Teste", "116654646", "abrigo@test.com");
 
     @Test
-    public void deveVerificarSeDispararRequisicaoGetSeraChamado () throws IOException, InterruptedException {
+    public void deveVerificarQuandoHaAbrigo () throws IOException, InterruptedException {
 
         abrigo.setId(0L);
         String expectedAbrigosCadastrados = "Abrigos cadastrados:";
@@ -42,6 +42,28 @@ public class AbrigoServiceTest {
 
         assertEquals(expectedAbrigosCadastrados, actualAbrigosCadastrados);
         assertEquals(expectedIdENome, actualIdENome);
+
+    }
+
+    @Test
+    public void deveVerificarQuandoNaoHaAbrigo () throws IOException, InterruptedException {
+
+        abrigo.setId(0L);
+        String expected = "Não há abrigos cadastrados!";
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(baos);
+        System.setOut(printStream);
+
+        when(response.body()).thenReturn("[]");
+        when(client.dispararRequisicaoGet(anyString())).thenReturn(response);
+
+        abrigoService.listarAbrigos();
+
+        String[] lines = baos.toString().split(System.lineSeparator());
+        String actual = lines[0];
+
+        assertEquals(expected, actual);
 
     }
 }
