@@ -5,7 +5,7 @@ import br.com.alura.service.AbrigoService;
 
 import java.io.IOException;
 
-public class CadastrarAbrigoCommand implements Command{
+public class CadastrarAbrigosCommand implements Command{
     @Override
     public void execute() {
         try {
